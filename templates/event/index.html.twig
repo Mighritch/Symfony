@@ -30,6 +30,7 @@
                 <td>{{ event.category.titre }}</td>
                 <td>
                     <a href="{{ path('event_edit', {'id': event.id}) }}">Modifier</a>
+                    {{ include('event/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}

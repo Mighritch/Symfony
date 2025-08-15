@@ -24,12 +24,20 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
+    public function remove(Event $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     public function findAllWithCategory()
-{
-    return $this->createQueryBuilder('e')
-        ->leftJoin('e.category', 'c')
-        ->addSelect('c')
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.category', 'c')
+            ->addSelect('c')
+            ->getQuery()
+            ->getResult();
+    }
 }
