@@ -15,16 +15,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     #[Route('/', name: 'event_index', methods: ['GET'])]
-    public function index(EventRepository $eventRepository): Response
+    public function index(Request $request, EventRepository $eventRepository): Response
     {
-        $events = $eventRepository->createQueryBuilder('e')
-            ->leftJoin('e.category', 'c')
-            ->addSelect('c')
-            ->getQuery()
-            ->getResult();
+        $searchTerm = $request->query->get('q');
+        $events = $searchTerm 
+            ? $eventRepository->searchByTitle($searchTerm)
+            : $eventRepository->findAllWithCategory();
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            'searchTerm' => $searchTerm
         ]);
     }
 

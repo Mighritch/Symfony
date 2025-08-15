@@ -37,6 +37,19 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->leftJoin('e.category', 'c')
             ->addSelect('c')
+            ->orderBy('e.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function searchByTitle(string $searchTerm)
+    {
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.category', 'c')
+            ->addSelect('c')
+            ->where('LOWER(e.titre) LIKE LOWER(:searchTerm)')
+            ->setParameter('searchTerm', '%'.$searchTerm.'%')
+            ->orderBy('e.date', 'ASC')
             ->getQuery()
             ->getResult();
     }
